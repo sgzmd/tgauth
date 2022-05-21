@@ -37,19 +37,6 @@ const (
 	CheckAuthUrl   = "/check_auth"
 )
 
-func getTelegramUserData(r http.Request) (string, error) {
-	cookie, err := r.Cookie("tg_user")
-	if err != nil {
-		return "", err
-	} else {
-		j, err := url.QueryUnescape(cookie.Value)
-		if err != nil {
-			return "", err
-		}
-		return j, nil
-	}
-}
-
 // Checks if the user has successfully logged in with Telegram. It will return the
 // json string of the user data if the user is logged in, otherwise it will return error.
 func checkAuth(params map[string][]string) (map[string][]string, error) {
