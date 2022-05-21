@@ -1,7 +1,7 @@
-# Authentication with Telegram in Go
+# Web authentication with Telegram in Go
 
-I ran into issue that there's no end-to-end example, explaining how to log in with Telegram using Go, so I produced 
-this nano-app; hopefully some of you will find it useful.
+I ran into issue that there's no end-to-end example, explaining how to log in with Telegram using Go on a web page,
+so I produced this nano-app; hopefully some of you will find it useful.
 
 **Disclaimer:** this has not been vetted for the best security practices, and, in fact, was created as a toy
 example, suitable for my own toy apps. Use at your own risk!
