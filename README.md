@@ -6,6 +6,8 @@ this nano-app; hopefully some of you will find it useful.
 **Disclaimer:** this has not been vetted for the best security practices, and, in fact, was created as a toy
 example, suitable for my own toy apps. Use at your own risk!
 
+This app is not using _any_ fancy frameworks and 3P libraries - only what comes with Go.
+
 ## Preparation
 
 Before you start, I strongly encourage you to read [Telegram Login Widget](https://core.telegram.org/widgets/login) 
