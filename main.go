@@ -94,30 +94,36 @@ func checkAuth(params map[string][]string) (map[string][]string, error) {
 	return params, nil
 }
 
+// Checks if the user has successfully logged in with Telegram.
 func checkAuthHandler(w http.ResponseWriter, r *http.Request) {
-	params := make(map[string][]string)
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	params := make(map[string][]string)
 	for k, v := range r.Form {
 		params[k] = v
 	}
 
 	p2, err := checkAuth(params)
 	if err != nil {
+		// if checkAuth returns error it means the parameters login page
+		// has received are wrong, incorrect, or not from Telegram
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// If we are here then auth has passed
 	j, err := json.Marshal(p2)
 	if err != nil {
+		// This should practically never happen.
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// Finally, let's set cookie so that we can check if the user is logged in later on.
 	cookie := &http.Cookie{
 		Name:    TelegramCookie,
 		Expires: time.Now().Add(time.Hour * 24),
@@ -134,8 +140,10 @@ func HandleLoginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleIndexPage(w http.ResponseWriter, r *http.Request) {
+	// We first check if the user is logged in
 	cookie, err := r.Cookie(TelegramCookie)
 	if err != nil {
+		// If there's no login cookie, it guarantees that the user is not logged in.
 		http.Redirect(w, r, AuthUrl, http.StatusFound)
 		return
 	}
@@ -151,6 +159,8 @@ func HandleIndexPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if _, err := checkAuth(params); err != nil {
+		// checkAuth returned error, which means user is not logged in - e.g. auth expired
+		// or cookie doesn't look right.
 		http.Redirect(w, r, AuthUrl, http.StatusFound)
 		return
 	}
